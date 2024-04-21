@@ -11,8 +11,8 @@ export const createCustomer = async (req, res) => {
   if (!full_name || !phone_number || !email)
     return sendFildReq(res, "All fields are required");
 
-  const customer = 'SELECT * FROM Customer WHERE phone_number= ?'
-  const [rows] = await db.query(customer, [phone_number]);
+  const customer = 'SELECT * FROM Customer WHERE phone_number= ? || email =?'
+  const [rows] = await db.query(customer, [phone_number, email]);
 
   if(rows.length > 0) {
       return sendFildReq(res, "Customer already exist")
@@ -20,7 +20,7 @@ export const createCustomer = async (req, res) => {
 
   let sql = "INSERT INTO Customer (full_name, phone_number, email) VALUES (?, ?, ?)";
   await db.query(sql, [full_name, phone_number, email]);
-
+  
   return sendCreatSuccess(res, "Customer has been created");
 };
 
